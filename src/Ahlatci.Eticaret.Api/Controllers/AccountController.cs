@@ -1,4 +1,5 @@
-﻿using Ahlatci.Eticaret.Application.Models.RequestModels.Accounts;
+﻿using Ahlatci.Eticaret.Application.Models.Dtos.Accounts;
+using Ahlatci.Eticaret.Application.Models.RequestModels.Accounts;
 using Ahlatci.Eticaret.Application.Services.Abstraction;
 using Ahlatci.Eticaret.Application.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -33,7 +34,7 @@ namespace Ahlatci.Eticaret.Api.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<Result<int>>> Login(LoginVM loginVM)
+        public async Task<ActionResult<Result<TokenDto>>> Login(LoginVM loginVM)
         {
             var result = await _accountService.Login(loginVM);
             return Ok(result);
@@ -52,6 +53,3 @@ namespace Ahlatci.Eticaret.Api.Controllers
 
     }
 }
-
-
-

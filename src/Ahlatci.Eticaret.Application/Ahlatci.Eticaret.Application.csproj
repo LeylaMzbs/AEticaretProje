@@ -12,6 +12,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation" Version="11.7.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="MrAdvice" Version="2.12.2" />
     <PackageReference Include="Serilog" Version="3.0.1" />
@@ -20,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ahlatci.Eticaret.Domain\Ahlatci.Eticaret.Domain.csproj" />
     <ProjectReference Include="..\Ahlatci.Eticaret.PersistenceData\Ahlatci.Eticaret.PersistenceData.csproj" />
-    <ProjectReference Include="..\Ahlatci.Shop.Utils\Ahlatci.Shop.Utils.csproj" />
+    <ProjectReference Include="..\Ahlatci.Eticaret.Utils\Ahlatci.Eticaret.Utils.csproj" />
   </ItemGroup>
 
 </Project>

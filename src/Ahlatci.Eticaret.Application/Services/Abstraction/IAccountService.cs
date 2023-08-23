@@ -13,4 +13,3 @@ namespace Ahlatci.Eticaret.Application.Services.Abstraction
         Task<Result<bool>> UpdateUser(UpdateUserVM updateUserVM);
     }
 }
-

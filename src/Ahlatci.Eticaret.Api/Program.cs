@@ -33,7 +33,7 @@ Log.Logger = new LoggerConfiguration()
 //En düþük seviye.
 Log.Logger.Information("Program Started..."); 
 
-// Add services to the container.
+//Add services to the container.
 
 //ActionFilter registiration
 builder.Services.AddControllers(opt =>
@@ -75,7 +75,7 @@ builder.Services.AddHttpContextAccessor();
 //DbContext Registiration
 builder.Services.AddDbContext<AhlatciContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("AhlatciShop"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("AhlatciEticaret"));
 });
 
 //Repository Registiraction //Generic.
@@ -99,7 +99,7 @@ builder.Services.AddAutoMapper(typeof(DomainToDto), typeof(ViewModelToDomain));
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(CreateCategoryValidator));
 
 
-// JWT kimlik doðrulama servisini ekleme
+//JWT kimlik doðrulama servisini eklendi.
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -120,10 +120,10 @@ builder.Services.AddAuthentication(opt =>
         };
     });
 
+var app = builder.Build();  
 
-var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -68,7 +68,7 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
             var result = new Result<bool>();
 
             var cityById = await _uwork.GetRepository<City>().GetById(id);
-            if (cityById is null)
+            if(cityById is null)
             {
                 throw new NotFoundException($"{id} numaralı şehir bulunamadı.");
             }
@@ -83,7 +83,7 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
         {
             var result = new Result<bool>();
 
-            var cityIdExists = await _uwork.GetRepository<City>().AnyAsync(x => x.Id == updateCityVM.Id);
+            var cityIdExists = await _uwork.GetRepository<City>().AnyAsync(x=>x.Id == updateCityVM.Id);
             if (!cityIdExists)
             {
                 throw new NotFoundException($"{updateCityVM.Id} numaralı şehir bulunamadı.");

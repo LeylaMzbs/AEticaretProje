@@ -31,6 +31,10 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
 
         }
 
+        public AccountService()
+        {
+        }
+
         /// <summary>
         /// Yeni bir kullanıcı oluşturmak için kullanılan metod
         /// </summary>
@@ -87,11 +91,11 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
             //Bu kullanıcı adı ve parola ile eşleşen bir kullanıcı var mı
             var existsAccount = await _uWork.GetRepository<Account>().GetSingleByFilterAsync(x => x.Username == loginVM.Username && x.Password == hashedPassword, "Customer");
             //Kullanıcı yoksa hata fırlat.
-            if (existsAccount is null)
+            if(existsAccount is null)
             {
                 throw new NotFoundException($"{loginVM.Username} kullanıcı adına sahip kullanıcı bulunamadı ye da parola hatalıdır.");
             }
-
+            
             //Token expire (sona erme süresi) süresini belirle
             var expireMinute = Convert.ToInt32(_configuration["Jwt:Expire"]);
             var expireDate = DateTime.Now.AddMinutes(expireMinute);
@@ -102,13 +106,14 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
             result.Data = new TokenDto
             {
                 Token = tokenString,
-                ExpireDate = expireDate
+                ExpireDate = expireDate,
+                Role = existsAccount.Role
             };
 
             return result;
         }
 
-
+               
         /// <summary>
         /// Kullanıcı bilgilerini güncellemek için kullanılan servis metodu.
         /// </summary>

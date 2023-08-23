@@ -15,11 +15,9 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
 {
     public class CategoryService : ICategoryService
     {
-       
         private readonly IMapper _mapper;
         private readonly IUnitWork _db;
 
-        //Constructor servisten gelenler atandı.
         public CategoryService(IMapper mapper, IUnitWork db)
         {
             _mapper = mapper;
@@ -32,26 +30,26 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
             var result = new Result<List<CategoryDto>>();
 
             var categoryEntites = await _db.GetRepository<Category>().GetAllAsync();
-            
+            //categoryEntites = categoryEntites.Where(x => x.Id > 4);
             var categoryDtos = await categoryEntites.ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(); //Category Dto çevrildi.
-          
+                .ToListAsync();           
+            //var categoryDtos = _mapper.Map<List<Category>, List<CategoryDto>>(categoryEntites);
             result.Data = categoryDtos;
             _db.Dispose();
             return result;
         }
-        //Automapper Bir modeli başka bir modele çevirmek için kullanılıyor.
+
 
         [ValidationBehavior(typeof(GetCategoryByIdValidator))]
         public async Task<Result<CategoryDto>> GetCategoryById(GetCategoryByIdVM getCategoryByIdVM)
         {
             var result = new Result<CategoryDto>();
 
-            
+            //var categoryExists = await _context.Categories.AnyAsync(x=>x.Id == getCategoryByIdVM.Id);
             var categoryExists = await _db.GetRepository<Category>().AnyAsync(x => x.Id == getCategoryByIdVM.Id);
             if (!categoryExists)
             {
-                throw new NotFoundException($"{getCategoryByIdVM.Id} numaralı kategori bulunamadı."); //Exception'u Api'ye atar.
+                throw new NotFoundException($"{getCategoryByIdVM.Id} numaralı kategori bulunamadı.");
             }
 
             var categoryEntity = await _db.GetRepository<Category>().GetById(getCategoryByIdVM.Id);
@@ -68,6 +66,12 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
         public async Task<Result<int>> CreateCategory(CreateCategoryVM createCategoryVM)
         {
             var result = new Result<int>();
+
+            var categoryExistsSameName = await _db.GetRepository<Category>().AnyAsync(x => x.Name == createCategoryVM.CategoryName);
+            if (categoryExistsSameName)
+            {
+                throw new AlreadyExistsException($"{createCategoryVM.CategoryName} isminde bir kategori zaten mevcut.");
+            }
 
             var categoryEntity = _mapper.Map<CreateCategoryVM, Category>(createCategoryVM);
 
@@ -105,16 +109,16 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
         {
             var result = new Result<int>();
 
-            //Gönderilen id bilgisine karşılık gelen bir kategori var mı?
             var existsCategory = await _db.GetRepository<Category>().GetById(updateCategoryVM.Id);
             if (existsCategory is null)
             {
                 throw new Exception($"{updateCategoryVM} numaralı kategori bulunamadı.");
             }
 
-            //Mapper ile veritabanında kayıtlı kategoriyi getirir.
-            var updatedCategory = _mapper.Map(updateCategoryVM, existsCategory);
-            //Güncellemeyi veritabanına yansıtma.
+            //var updateCategory = _mapper.Map<UpdateCategoryVM,Category>(updateCategoryVM);
+
+            var updatedCategory = _mapper.Map(updateCategoryVM,existsCategory);
+
             _db.GetRepository<Category>().Update(updatedCategory);
             await _db.CommitAsync();
 
@@ -122,6 +126,5 @@ namespace Ahlatci.Eticaret.Application.Services.Implementation
             _db.Dispose();
             return result;
         }
-
     }
 }
